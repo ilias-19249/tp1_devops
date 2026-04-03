@@ -13,12 +13,6 @@ include "db.php";
 
 <?php
 
-    if (isset($_GET['deleted']) && $_GET['deleted'] == 1) {
-        $deletedId = intval($_GET['id']);
-        echo "<p style='color: green;'> la tache  $deletedId est supprimée!</p>";
-    }
-
-
     $sql = "SELECT * FROM task";
     $result = $connexion->query($sql);
 
