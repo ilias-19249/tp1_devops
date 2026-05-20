@@ -1,13 +1,8 @@
-<?php
-include "db.php";
-
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Liste des tâches</title>
+    <title>Ajouter une tache</title>
     <link rel="stylesheet" href="style/add_task.css">
 </head>
 <body>
@@ -29,3 +24,6 @@ include "db.php";
 
     <button type="submit">Add Task</button>
 </form>
+
+</body>
+</html>

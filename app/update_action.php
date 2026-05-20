@@ -1,13 +1,32 @@
 <?php
-include "db.php";
+require_once "db.php";
 
-$id = $_POST['id'];
-$name = $_POST['name'];
-$descripton = $_POST['descripton'];
-$executed = $_POST['executed'];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: index.php");
+    exit;
+}
 
-$sql = "UPDATE task SET name='$name', descripton='$descripton', executed=$executed WHERE id=$id";
-$connexion->query($sql);
+$id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+$name = trim($_POST['name'] ?? '');
+$descripton = trim($_POST['descripton'] ?? '');
+$executed = isset($_POST['executed']) ? (int) $_POST['executed'] : 0;
+$executed = $executed === 1 ? 1 : 0;
+
+if (!$id || $name === '' || $descripton === '') {
+    header("Location: index.php?error=invalid_task");
+    exit;
+}
+
+$sql = "UPDATE task
+        SET name = :name, descripton = :descripton, executed = :executed
+        WHERE id = :id";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([
+    'id' => $id,
+    'name' => $name,
+    'descripton' => $descripton,
+    'executed' => $executed,
+]);
 
 header("Location: index.php");
-?>
+exit;

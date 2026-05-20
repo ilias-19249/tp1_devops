@@ -1,43 +1,55 @@
 <?php
-include "db.php";
+require_once "db.php";
 
+$sql = "SELECT * FROM task ORDER BY id DESC";
+$result = $pdo->query($sql);
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Liste des tâches</title>
+    <title>Liste des taches</title>
     <link rel="stylesheet" href="style/index.css">
 </head>
 <body>
 
-<?php
+<h1>Liste des taches</h1>
 
-    $sql = "SELECT * FROM task";
-    $result = $connexion->query($sql);
+<p>
+    <a href="create_task.php">Ajouter une tache</a>
+</p>
 
-    echo "<h1>La liste des taches</h2>";
-    echo "<p><a href='create_task.php' class='btn_add'> Ajouter une tâche</a></p>";
-    echo "<table border='1'>";
-    echo "<tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Description</th>
-            <th>Executed</th>
-            <th>Delete</th>
-            <th>Update</th>
-    </tr>";
-    while($row = $result->fetch_assoc()){
-        $tacheexecute = ($row['executed'] == 0) ? "Non executée" : "Executée";
-        echo "<tr>
-                <td>".$row['id']."</td>
-                <td>".$row['name']."</td>
-                <td>".$row['descripton']."</td>
-                <td>".$tacheexecute."</td>
-                <td><a href='delete_task.php?id=".$row['id']." ' class='btn_delete'>Delete</a></td>
-                <td><a href='update_task.php?id=".$row['id']." ' class='btn_update'>Update</a></td>
-            </tr>";
-    }
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Description</th>
+        <th>Etat</th>
+        <th>Delete</th>
+        <th>Update</th>
+    </tr>
 
-    
-?>
+<?php while ($row = $result->fetch()) { ?>
+
+    <tr>
+        <td><?= htmlspecialchars((string) $row['id']) ?></td>
+        <td><?= htmlspecialchars($row['name']) ?></td>
+        <td><?= htmlspecialchars($row['descripton']) ?></td>
+        <td>
+            <?= (int) $row['executed'] === 0 ? "Non executee" : "Executee" ?>
+        </td>
+        <td>
+            <a href="delete_task.php?id=<?= urlencode((string) $row['id']) ?>">Delete</a>
+        </td>
+        <td>
+            <a href="update_task.php?id=<?= urlencode((string) $row['id']) ?>">Update</a>
+        </td>
+    </tr>
+
+<?php } ?>
+
+</table>
+
+</body>
+</html>

@@ -1,15 +1,15 @@
 <?php
-include "db.php";
-$id = $_GET['id'];
+require_once "db.php";
 
-if($id){
-    $query = "DELETE FROM task WHERE id =".$_GET['id'];
-    $result = $connexion->query($query);
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-    header("Location: index.php?deleted=1&id=$id");
+if (!$id) {
+    header("Location: index.php?error=invalid_id");
     exit;
-}else{
-    echo "il y a pas une tache avec cet id";
 }
 
-?>
+$stmt = $pdo->prepare("DELETE FROM task WHERE id = :id");
+$stmt->execute(['id' => $id]);
+
+header("Location: index.php?deleted=1");
+exit;
