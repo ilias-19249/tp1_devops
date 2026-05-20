@@ -18,11 +18,9 @@ services:
       db:
         condition: service_healthy
 
-    volumes:
-      - ./app:/var/www/html
-
   db:
-    image: mysql:8.0
+    build:
+      context: ./docker/db
 
     environment:
       MYSQL_DATABASE: tasks
@@ -32,7 +30,6 @@ services:
 
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "task_user", "-ptask_password"]
