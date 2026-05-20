@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+        - name: db
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_DATABASE
+              value: tasks
+            - name: MYSQL_USER
+              value: task_user
+            - name: MYSQL_PASSWORD
+              value: task_password
+            - name: MYSQL_ROOT_PASSWORD
+              value: root_password
